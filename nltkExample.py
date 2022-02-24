@@ -10,11 +10,11 @@ from nltk.chunk import conlltags2tree, tree2conlltags
 from pprint import pprint
 
 
-
 tokenized_phrases = []
 tags = []
 cs = []
 iob_tagged = []
+tagged_phrases=[]
 
 pattern = 'NP: {<DT>?<JJ>*<NN>}'
 
@@ -38,6 +38,18 @@ def markPhrases(tokenized_phrases):
         tags.append(pos_tag(tokenized_phrase))
     return tags
 
+def markIdentity(word, tags, prev):
+    id = "O"
+    for tag in tags:        
+        if word in tag: 
+            if prev == "O":
+                id = "B"
+            else: 
+                id = "I"
+        else: 
+            id = "O"
+    return id
+
 def createVector(tags):
     cs = []
     #prepare parser
@@ -57,7 +69,22 @@ def writeResultFile(iob_tagged):
     for iob in iob_tagged:
          f.write(' '.join(str(s) for s in iob) + "\n\n")         
 
-        
+def findGoldSetTags(tokenized_phrases, tags): 
+    tagged_words = []
+    tagged_phrases = []
+    id = "O"
+    prevId = "O"
+    for phrase in tokenized_phrases:
+        tagged_words=[]
+        id="O"
+        for word in phrase:
+           id = markIdentity(word, tags, prevId)
+           prevId=id
+           tagged_words.append([word, id])
+        tagged_phrases.append(tagged_words)
+    return tagged_phrases
+
+
 
 #clean log file
 f = open("taggedPhrases.txt", "w")
@@ -65,15 +92,11 @@ f.close()
 
 
 tokenized_phrases = getWordsFromFile("Phrases.txt")
-#entities = []
-tags = markPhrases(tokenized_phrases)
-
-#for tag in tags:
-#    entities.append(nltk.chunk.ne_chunk(tag))
- 
-cs = createVector(tags)
-iob_tagged = findNER(cs)
-writeResultFile(iob_tagged)
+tags = getWordsFromFile("GoldenSet.txt")
+#print(tags)
+#print(tokenized_phrases)
+tagged_phrases = findGoldSetTags(tokenized_phrases, tags)
+writeResultFile(tagged_phrases)
 
 
 
