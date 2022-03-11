@@ -9,41 +9,43 @@ Reasoning
 Problem solving
 Accommodation
 Assimilation
-Associative processes
+Associative
 Chunking
 Classification
-Cognitive bias
-Cognitive appraisal
-Cognitive discrimination
-Cognitive dissonance
-Cognitive generalization
-Cognitive mediation
-Cognitive style
+Cognitive
+appraisal
+discrimination
+dissonance
+generalization
+mediation
+Cognitive
 Comprehension
 Concentration
-Concept formation
-Conceptual blending
 Creativity
-Day dreaming
-Decision making
-Defence mechanisms
+Dreaming
+Decision
+Defence
 Fantasy
 Ideation
 Imagination
 Introspection
 Intuition
-Magical thinking
-Mental rotation
+Magical
+Mental
 Metacognition
 Naming
-Problem solving
+solving
 Rumination
 Schema
-Semantic generalization
-Sexual fantasy
-Social cognition
+Semantic
+generalization
+Sexual
+fantasy
+Social
+cognition
 Thinking
-Thought suppression
+Thought 
+Suppression
 Transposition
 Vigilance
 Volition
@@ -52,11 +54,12 @@ Beliefs
 Concepts
 Delusions
 Expectations
-False beliefs
+beliefs
 Hallucinations
 Imagery
 Insight
 Intentionality
 Ideas
-Irrational beliefs
+Irrational
+Beliefs
 Thoughts

@@ -1,0 +1,14 @@
+Sight
+Taste
+Tauch
+Pressure
+Itch
+Termoception
+Sound
+Smell
+Proprioception
+Nociception
+Equilibrioception
+Thurst
+Hunger
+Pain

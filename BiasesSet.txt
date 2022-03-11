@@ -1,16 +1,20 @@
-Overconfidence bias
-Self Serving Bias
-Herd Mentality
-Loss Aversion
-Framing Cognitive Bias
-Narrative Fallacy
-Anchoring Bias
-Confirmation Bias
-Hindsight Bias
-Representativeness Heuristic
-Loss Aversion Bias
-Overconfidence Bias
-Self-Control Bias
-Endowment Bias
-Regret Aversion Bias
-Status Quo Bias
+Overconfidence
+Self-Serving
+Herd 
+Mentality
+Loss 
+Aversion
+Framing 
+Cognitive
+Narrative 
+Fallacy
+Hindsight
+Representativeness
+Heuristic
+Aversion
+Overconfidence
+Self-Control
+Endowment
+Regret
+Aversion
+Quo
