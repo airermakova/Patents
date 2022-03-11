@@ -1,13 +1,21 @@
 import re
 import nltk
 import numpy
+from langdetect import detect
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('maxent_ne_chunker')
 nltk.download('words')
+nltk.download('conll2002')
+nltk.download('conll2000')
 from nltk import word_tokenize,pos_tag
 from nltk.chunk import conlltags2tree, tree2conlltags
 from pprint import pprint
+
+from nltk.corpus import words
+from nltk.corpus import conll2000, conll2002
+
+
 
 
 tokenized_phrases = []
@@ -165,10 +173,10 @@ def getMarkedIdentity(phrase):
     return identity
 
 def overwriteIdentity(identity, phrase, tags):
-    newphrase = phrase            
+    newphrase = phrase      
     for id in identity:                
        cnt = 0
-       for w in id:                     
+       for w in id:                
           if w[0] in tags:
              cnt=cnt + 1             
        if cnt==0:
@@ -190,6 +198,33 @@ def findGoldSetTags(tokenized_phrases, tags):
         tagged_phrases.append(tagged_words)
     return tagged_phrases
 
+def writeEnglishWordsCorpora(fileName):
+    f = open(fileName, "w")
+    finARr = []
+    for word in conll2002.iob_words():
+        if word[0].isalpha():        
+            if "B" in word[2] or "I" in word[2]: 
+                if word[0] in words.words() and word[0] not in finARr:   
+                    print(word[0])      
+                    finARr.append(word[0])
+                    f.write(word[0] + "\n")
+    for word in conll2000.iob_words():  
+        if word[0].isalpha():      
+            if word[0].isalpha() and detect(word[0]) == "en":
+                if "B" in word[2] or "I" in word[2]:
+                    if word[0] in words.words() and word[0] not in finARr: 
+                        print(word[0])                        
+                        finARr.append(word[0]) 
+                        f.write(word[0] + "\n")
+    #for w in finARr:
+    #    f.write(w + " ")
+    #f.close()
+
+    #f = open("allWords.txt", "w")
+    #for w in words.words():
+    #    f.write(w + "\n") 
+    #    print(w) 
+
 #SERVICE FUNSTIONS AREA END
 
 
@@ -197,8 +232,11 @@ def findGoldSetTags(tokenized_phrases, tags):
 f = open("taggedPhrases.txt", "w")
 f.close()
 
+#take all words used for ner tagging nltk
+#writeEnglishWordsCorpora("nltk_words.txt")
 
 tokenized_phrases = getWordsFromFile("Phrases.txt")
+print((tokenized_phrases))
 nltk_tags = markPhrases(tokenized_phrases)
 cs = createVector(nltk_tags)
 iob_tagged = findNER(cs)
@@ -208,6 +246,7 @@ tagged_phrases = recheckTaggedPhrases(iob_tagged, tags)
 fin_phrases = addGoldSetTags(tagged_phrases, tags)
 #tagged_phrases = findGoldSetTags(tokenized_phrases, tags)
 writeResultFile(tokenized_phrases, fin_phrases)
+
 
 
 
