@@ -11,7 +11,7 @@ nltk.download('conll2000')
 from nltk import word_tokenize,pos_tag
 from nltk.chunk import conlltags2tree, tree2conlltags
 from pprint import pprint
-
+from nltk.stem.snowball import SnowballStemmer
 from nltk.corpus import words
 from nltk.corpus import conll2000, conll2002
 
@@ -25,7 +25,7 @@ cs = []
 iob_tagged = []
 tagged_phrases=[]
 nltk_tags=[]
-
+stemmer = SnowballStemmer("english")
 pattern = 'NP: {<DT>?<JJ>*<NN>}'
 
 #MAIN FUNCTIONALITY AREA
@@ -70,10 +70,12 @@ def getWordsFromGoldenSet(fileName):
     try:
         with open(fileName, 'r') as file:
             phrases = file.read().split("\n")
+        wroot = ""
         for phrase in phrases:
             for word in (word_tokenize(phrase)):
-                if word not in tags and len(word)>3:
-                    tags.append(word) 
+                wroot = stemmer.stem(word)
+                if wroot not in tags and len(wroot)>3:
+                    tags.append(wroot) 
         return tags       
     except: 
         print("Error in reading file " + fileName)
@@ -177,7 +179,7 @@ def overwriteIdentity(identity, phrase, tags):
     for id in identity:                
        cnt = 0
        for w in id:                
-          if w[0] in tags:
+          if stemmer.stem(w[0]) in tags:
              cnt=cnt + 1             
        if cnt==0:
           newphrase = cancelIdentity(newphrase, id)
