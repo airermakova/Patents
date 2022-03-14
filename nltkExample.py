@@ -93,8 +93,6 @@ def recheckTaggedPhrases(tagged_phrases, tags):
         elif len(identity)>0:
             newphrase = overwriteIdentity(identity, phrase, tags)
             finalTags.append(newphrase)
-        else: 
-            finalTags.append(phrase)
         identity=[]
     return finalTags
 
@@ -141,7 +139,7 @@ def addGoldSetTags(final_phrases, tags):
         tagged_phrases.append(tagged_words)
     return tagged_phrases
 
-def cancelIdentity(phrase, id): 
+def cancelIdentity(phrase, id):
     newPh = []
     wr = []
     for w in phrase:
@@ -160,12 +158,11 @@ def cancelIdentity(phrase, id):
 def getMarkedIdentity(phrase):
     identity = []
     id = []
-    for word in phrase:          
+    for word in phrase:        
         if len(word)==3:
             if "B" in word[2]:
                 if len(id)>0:
                       identity.append(id)
-                      id = []
                 id.append(word)
             elif "I" in word[2]:
                 id.append(word)
@@ -175,7 +172,7 @@ def getMarkedIdentity(phrase):
     return identity
 
 def overwriteIdentity(identity, phrase, tags):
-    newphrase = phrase      
+    newphrase = phrase 
     for id in identity:                
        cnt = 0
        for w in id:                
