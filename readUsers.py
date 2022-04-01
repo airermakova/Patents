@@ -67,7 +67,12 @@ def checkMarkedArrayPresence(phrases, users, prop):
             pr = []
             wr = []
     return finArr
-          
+
+def writeResultFile(finalArray):
+    f = open("additionalUsers.txt", "a")
+    for arr in finalArray:
+        f.write(' '.join(str(s) for s in arr) + "\n")  
+         
 
 users = []
 users = getDataFromFile("user.txt")
@@ -80,4 +85,6 @@ phrases = []
 phrases = getWordsFromFile("Phrases.txt")
 
 fin = checkMarkedArrayPresence(phrases, users, significants)
+
+writeResultFile(fin)
 print(fin)
