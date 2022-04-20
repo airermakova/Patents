@@ -55,44 +55,63 @@ def checkMarkedArrayPresence(phrases, users):
     phrasesArr=[]
     cancelId = True
     for phrase in phrases:
-        #print(phrase)
         cancelId = True
-        nltk_tags = pos_tag(word_tokenize(phrase))
-        iob_tagged = tree2conlltags(nltk_tags)    
+        nltk_tags = pos_tag(word_tokenize(phrase))  
+        iob_tagged = tree2conlltags(nltk_tags) 
+        userFound = False
         for user in users:
-            if user in phrase:
-                cancelId = False
-                print(phrase)
-                print(user)
-                new_iob = []
-                for iob in iob_tagged:               
-                    if len(iob)>2 and user in iob[0]:
-                        L = list(iob)
-                        L[2]="B"
-                        iob = tuple(L)
-                        new_iob.append(iob)
-                    else:
-                        new_iob.append(iob)   
-        if cancelId == True:
-            for iob in iob_tagged:
-                if len(iob)>2:
-                    L = list(iob)
-                    L[2]="O"
-                    iob = tuple(L)
-            finArr.append(iob_tagged)
-        else:
-            finArr.append(new_iob)
-            onlyUsers.append(new_iob)
+            ind = phrase.find(user)
+            if ind>0:
+                us = user.split(" ")
+                finArr=markUser(iob_tagged, us)
+                allowAp = False
+                for w in finArr:
+                    if w[2] == "B" or w[2]=="I":
+                        allowAp = True
+                if allowAp == True:
+                    onlyUsers.append(finArr)          
     return onlyUsers
                 
-             
-            
+def markUser(phrase,user):
+    finTuple = []
+    users = []    
+    for ph in phrase:
+        found = False
+        nonFirst = False
+        for u in user:            
+            if ph[0] == u and ph[1]=="NN":
+                print(user)  
+                if user not in users:
+                    users.append(user)              
+                ls = list(ph)
+                if len(user)>1:
+                    if nonFirst == False:
+                        ls[2]="B"
+                        nonFirst = True
+                    else:
+                        ls[2]="I"
+                else:
+                    ls[2]="B"
+                    nonFirst = True
+
+                finTuple.append(tuple(ls))
+                found = True
+        if found == False:
+            finTuple.append(ph)   
+    writeUsersFile(users)  
+    return finTuple
+ 
 
 def writeResultFile(finalArray):
-    f = open("taggedPatent.txt", "a")
+    f = open("taggedPatent.txt", "w")
     for arr in finalArray:
         f.write(' '.join(str(s) for s in arr) + "\n\n\n")  
          
+def writeUsersFile(finalArray):
+    f = open("onlyUsers.txt", "a")
+    for arr in finalArray:
+        f.write(' '.join(str(s) for s in arr) + "\n")  
+
 
 users = []
 users = getDataFromFile("usersList.txt")
@@ -101,7 +120,10 @@ users = getDataFromFile("usersList.txt")
 phrases = []
 phrases = getWordsFromFile("Trialdocu.txt")
 
+f = open("onlyUsers.txt", "w")
+f.close()
+
 fin = checkMarkedArrayPresence(phrases, users)
 
 writeResultFile(fin)
-print(fin)
+
