@@ -61,43 +61,51 @@ def checkMarkedArrayPresence(phrases, users):
         userFound = False
         for user in users:
             ind = phrase.find(user)
+            us = user.split(" ")
             if ind>0:
-                us = user.split(" ")
-                finArr=markUser(iob_tagged, us)
-                allowAp = False
-                for w in finArr:
-                    if w[2] == "B" or w[2]=="I":
-                        allowAp = True
-                if allowAp == True:
-                    onlyUsers.append(finArr)          
+               iob_tagged = markUser(iob_tagged, us)
+        onlyUsers.append(markUser(iob_tagged, us))          
     return onlyUsers
                 
 def markUser(phrase,user):
     finTuple = []
-    users = []    
-    for ph in phrase:
-        found = False
-        nonFirst = False
-        for u in user:            
-            if ph[0] == u and ph[1]=="NN":
-                print(user)  
-                if user not in users:
-                    users.append(user)              
-                ls = list(ph)
-                if len(user)>1:
-                    if nonFirst == False:
-                        ls[2]="B"
-                        nonFirst = True
-                    else:
-                        ls[2]="I"
-                else:
-                    ls[2]="B"
-                    nonFirst = True
-
-                finTuple.append(tuple(ls))
-                found = True
-        if found == False:
-            finTuple.append(ph)   
+    users = []
+    found = False
+    if len(user)>1:
+       nonFirst = False
+       cnt = 0
+       ucnt = 0
+       for ph in phrase:
+           finTuple.append(ph)
+           ucnt = ucnt +1
+           found = False
+           for u in user: 
+               if ph[0]==u:
+                   found = True
+           if found == True:
+               cnt = cnt + 1
+           else:
+               cnt = cnt - 1
+           if cnt == len(user)-1:              
+               ls = list(phrase[ucnt-cnt-1])
+               ls[2]="B"
+               finTuple[ucnt-cnt-1]=tuple(ls)
+               for i in range(cnt):
+                   ls = list(phrase[ucnt-cnt+i])
+                   ls[2]="I"
+                   finTuple[ucnt-cnt+i]=tuple(ls)
+               cnt = 0           
+       print(finTuple)
+    else:
+        print(user)
+        for ph in phrase:
+           finTuple.append(ph)         
+           if ph[0] == user[0] and ph[1][0]=="N":  
+               if user[0] not in users:
+                    users.append(user[0])              
+               ls = list(ph)
+               ls[2]="B"
+               finTuple[len(finTuple)-1] = (tuple(ls))                    
     writeUsersFile(users)  
     return finTuple
  
@@ -124,6 +132,6 @@ f = open("onlyUsers.txt", "w")
 f.close()
 
 fin = checkMarkedArrayPresence(phrases, users)
-
+#print(fin)
 writeResultFile(fin)
 
