@@ -64,7 +64,9 @@ def checkMarkedArrayPresence(phrases, users):
             us = user.split(" ")
             if ind>0:
                iob_tagged = markUser(iob_tagged, us)
-        onlyUsers.append(markUser(iob_tagged, us))          
+        for iob in iob_tagged:
+            if iob[2]=="B":
+                onlyUsers.append(markUser(iob_tagged, us))          
     return onlyUsers
                 
 def markUser(phrase,user):
