@@ -100,20 +100,33 @@ def markUser(phrase,user):
        print(finTuple)
     else:
         print(user)
-        for ph in phrase:
-           finTuple.append(ph)         
-           if ph[0] == user[0] and ph[1][0]=="N":  
-               if user[0] not in users:
-                    users.append(user[0])              
-               ls = list(ph)
-               ls[2]="B"
-               finTuple[len(finTuple)-1] = (tuple(ls))                    
-    writeUsersFile(users)  
+        for i in range(0, len(phrase)):
+           finTuple.append(phrase[i])         
+           if phrase[i][0] == user[0] and phrase[i][1][0]=="N":  
+               cnt = i-1
+               found = False
+               while cnt>=0 and phrase[cnt][1]=="JJ":
+                   ls = list(phrase[cnt])
+                   ls[2]="I"
+                   finTuple[cnt] = (tuple(ls))
+                   cnt = cnt - 1 
+                   found = True
+
+               ls = list(phrase[i])
+               if found == False:
+                   ls[2]="B"
+               else:
+                   ls[2]="I"
+               finTuple[len(finTuple)-1] = (tuple(ls))
+               if found == True:
+                   ls = list(phrase[cnt+1])
+                   ls[2]="B"
+                   finTuple[cnt+1] = (tuple(ls))
     return finTuple
  
 
 def writeResultFile(finalArray):
-    f = open("taggedPatent.txt", "w")
+    f = open("taggedPatent.txt", "a")
     for arr in finalArray:
         f.write(' '.join(str(s) for s in arr) + "\n\n\n")  
          
@@ -128,7 +141,7 @@ users = getDataFromFile("usersList.txt")
 #print(users)
 
 phrases = []
-phrases = getWordsFromFile("Trialdocu.txt")
+phrases = getWordsFromFile("test.txt")
 
 f = open("onlyUsers.txt", "w")
 f.close()
