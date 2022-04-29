@@ -1,6 +1,7 @@
 import re
 import nltk
 import numpy
+import random
 from langdetect import detect
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
@@ -124,11 +125,49 @@ def markUser(phrase,user):
                    finTuple[cnt+1] = (tuple(ls))
     return finTuple
  
+def writeValidationSet(finArr, cntrVal):
+    valSet = []
+    t = 0
+    for s in finArr:
+        t = t+1
+        if t>=cntrVal:
+            valSet.append(s)
 
-def writeResultFile(finalArray):
-    f = open("taggedPatent.txt", "a")
-    for arr in finalArray:
-        f.write(' '.join(str(s) for s in arr) + "\n\n\n")  
+def writeResultFile(trainSet):
+    t = open("train.txt", "a")
+    v = open("val.txt", "a")
+    te = open("test.txt", "a")
+    for arr in trainSet:
+        for s in arr:
+            for st in s:
+                t.write(st + " ")
+            t.write("\n")
+        t.write("\n\n\n") 
+        #f.write(' '.join(str(s) for s in arr) + "\n\n\n")  
+    t = 0
+    for arr in trainSet:
+        t = t+1
+        if t>3:
+            t = 0
+            for s in arr:
+                for st in s:
+                    v.write(st + " ")
+                v.write("\n")
+            v.write("\n\n\n") 
+            #f.write(' '.join(str(s) for s in arr) + "\n\n\n")
+    t = 0
+    for arr in trainSet:
+        t = t+1
+        if t>4:
+            t = 0
+            for s in arr:
+                for st in s:
+                    te.write(st + " ")
+                te.write("\n")
+            te.write("\n\n\n") 
+            #f.write(' '.join(str(s) for s in arr) + "\n\n\n")
+
+     
          
 def writeUsersFile(finalArray):
     f = open("onlyUsers.txt", "a")
@@ -136,17 +175,24 @@ def writeUsersFile(finalArray):
         f.write(' '.join(str(s) for s in arr) + "\n")  
 
 
+
 users = []
 users = getDataFromFile("usersList.txt")
 #print(users)
 
-phrases = []
-phrases = getWordsFromFile("test.txt")
+trainSet = []
+valSet = []
+testSet = []
+trainSet = getWordsFromFile("Trialdocu.txt")
+
 
 f = open("onlyUsers.txt", "w")
 f.close()
 
-fin = checkMarkedArrayPresence(phrases, users)
+fin = checkMarkedArrayPresence(trainSet, users)
+#valSet = writeValidationSet(fin, 5)
+#testSet = writeValidationSet(fin, 4)
+
 #print(fin)
 writeResultFile(fin)
 
