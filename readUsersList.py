@@ -140,10 +140,9 @@ def writeResultFile(trainSet):
     for arr in trainSet:
         for s in arr:
             for st in s:
-                t.write(st + " ")
-            t.write("\n")
-        t.write("\n\n\n") 
-        #f.write(' '.join(str(s) for s in arr) + "\n\n\n")  
+                t.write((st + " ").encode("utf-8").decode("utf-8"))
+            t.write("\n".encode("utf-8").decode("utf-8"))            
+        t.write("\n\n\n".encode("utf-8").decode("utf-8")) 
     t = 0
     for arr in trainSet:
         t = t+1
@@ -151,9 +150,9 @@ def writeResultFile(trainSet):
             t = 0
             for s in arr:
                 for st in s:
-                    v.write(st + " ")
-                v.write("\n")
-            v.write("\n\n\n") 
+                    v.write((st + " ").encode("utf-8").decode())
+                v.write("\n".encode("utf-8").decode())
+            v.write("\n\n\n".encode("utf-8").decode()) 
             #f.write(' '.join(str(s) for s in arr) + "\n\n\n")
     t = 0
     for arr in trainSet:
@@ -162,11 +161,9 @@ def writeResultFile(trainSet):
             t = 0
             for s in arr:
                 for st in s:
-                    te.write(st + " ")
-                te.write("\n")
-            te.write("\n\n\n") 
-            #f.write(' '.join(str(s) for s in arr) + "\n\n\n")
-
+                    te.write((st + " ").encode("utf-8").decode())
+                te.write("\n".encode("utf-8").decode())
+            te.write("\n\n\n".encode("utf-8").decode()) 
      
          
 def writeUsersFile(finalArray):
