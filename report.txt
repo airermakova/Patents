@@ -1,0 +1,64 @@
+1. We have developed a theory to distinguish automatically whether patent user is human or not
+
+   This aim of this theory is to identify signs we can use to automatically identify
+if patent is written for human being or not and identify of age groups of potential users. As a signs we have agreed to employ all possible terms which can be applied only for human being. Terms valid as for human as for human alike robots, artificial intelligence or neural networks we have not included in potential signs.
+ 
+2. We have developed algorithms for automatic identification whether patent user is human being or not
+
+   Algorithm has been created for software to automatically recognize whether patent user is human being or not and automatically identify age group of users. As a base for this algorithm we have used theory developed in step 1. For software development based on this algorithm we have made in step 5.
+
+3. For automatic patent user identification I have prepared set of following terms
+   -anathomy
+   -cognitive processes terms
+   -emotions
+   -body illnesses
+   -mental illnesses
+   -disorders
+
+Those set of terms has beed used in step 5.
+
+4. I have passes following online courses
+   - Natural language processing in python 
+   Course consists of 5 subcourses about modern software packages, algorhitms and theory for automatic analysis of texts written in natural language.
+   - Tydeverse
+   Course consists of 5 subcourses about modern software packages aimed to sort and present big    chanks of data. Data presentation can be done in forms of graphs, tables and diagrams.
+
+5. I have created software to automatically recognize if word is user identity or part of user identity. As an algorithm for this software I have been using parts of algorithm developed in step 2 and sets of terms that can be applied to human being only developed in step 3.
+   
+   Developed program aimed to distinguish if word is user or part of user identity. Its marking all words in text by tags applyed in name entity recognition (B - user identity, I - part of user identity containing several words, O - not user ). User identity marking is done in 2 steps. Initial step for identity recognition is done applying software library nltk. This library allows to recognize if word is part of user identity or not. For user identification nltk is using users collection obtained by neural network trained on large amount of texts where users were marked by human being.
+
+   Final step for identity recognition is to check whether user identity marked in initial step contains at least one term from list of terms I have prepared in step 3. If marked user identity contains at least one term from those lists I was keeping those user identity, otherwise I was remarking words as not user. 
+
+   This program was usefull for step number 7
+
+6. From previous researches done in Univesity, I have taken set of potential patent users and selected only human being user. 
+    
+   This list of potential users has been developed by my colleagues and my superviser. Users has been extracted from large amount of patents. Users has been taken manually and by specially trained neural networks. List included not only human being patent users but also animals. I have selected only human being users.
+
+7. I have modified program written in step 5 in order to automatically enlarge list of potential patent users prepared in step 6. 
+
+   This program has been based on program developed in step 5. I have added one more step for final user identification. This step for identity recognition is checking whether user identity marked in previous step contains at least one user from list of users developed in step 6. If user identity marked in previous step does not contain users from use  r list from step 6, identity would have been marked as no user. If user identity marked in previous step contained users from user list from step 6, new user would be added to user list developed at step 6.
+
+8. I have enlarged sets of potential users using program developed in step 7 and using as information source scientific articles about psychology, cognitive processes and sport medicine. 
+   
+   With program developed in step 7 I have enlarged list of users described in step 6. With program described in step 7 I have been marking user identity using as a sources scientific articles about psychology, cognitive processes and sport medicine. Users tagged by this programn I have added into list of potential users described in step 6. 
+
+9. I have written a program to automatic preparation of training set for training of neural network classifier. 
+
+   In step 8 we have finalyzed preparation of potential patent users and I am ready to write program to automatically create training set to train neural network. 
+Algorithm of this program is following: 
+    - Pass through all phrases and if those phrases contained user/s from list of users developed in step 6 mark them as a user (B) or part of user identity (I). 
+    - For all users recognized in previous step in case previous words are adgectives add them into user identity and consequently remark user/s marked in previoud steps as user identity consistent from several words.
+    - To save only phrases which has contained users in separate file, keeping file formatting appropriate for training sets.
+Following this algorithm I have written program to automatically prepare training set.
+
+10. I have installed pytorch and FlairNN, neural network and developemnt libraries used by my colleagues for their researches. 
+
+11. I have trained FlairNN using training set prepared in step 9. 
+
+    Trained neural network in further steps shall automatically tag users in various sets of patents from various fields. And our aim is to estimate its performance. Because its first neural network trained on training set prepared automatically and not manually. 
+
+
+
+
+      
