@@ -24,8 +24,20 @@ from nltk.stem.snowball import SnowballStemmer
 from nltk.corpus import words
 from nltk.corpus import conll2000, conll2002
 
-phrases = ['old human customer', "old human", "young person"]
+phrases = []
 users = []
+
+#TO GET PHRASES
+def getPhrasesFromFile(fileName):
+    phrases= []    
+    tokenized_phrases = []
+    try:
+       with open(fileName, 'r') as file:
+           phrases = file.read().split(".")
+       return phrases
+    except:
+      print("Error in reading " + fileName)
+      exit()
 
 #TO MARK USERS AS WE HAVE DONE FOR TRAIN SET
 
@@ -145,21 +157,19 @@ def getUsersFromNN(phrase):
     print(onlusers[1])
     for tp in tupleArr: 
         t = tp.split("/")
-        if t[1] == "<unk>" or t[1] == "<unk>]":
-            t[1] = "O"
-        onlyUsers.append(tuple(t))
+        if len(t)>1:
+            if t[1] == "<unk>" or t[1] == "<unk>]":
+                t[1] = "O"
+            onlyUsers.append(tuple(t))
     return onlyUsers
 
-#MAIN VARIABLES
-truePositives = 0
-falsePositives = 0
-realPositives = 0
-
-#MAIN SCRIPT
+#TO CALCULATE TRUE AND FALSE POSITIVES
 
 def precisionEstimator(clasRes, trainPrep):
-    results = [0,0,0]
-    for i in range(len(clasRes)): 
+    results = [0,0,0,0]
+    if len(clasRes) != len(trainPrep):
+        return results
+    for i in range(len(clasRes)):
         c = re.sub(r'\W+', '', clasRes[i][0])
         u = re.sub(r'\W+', '', trainPrep[i][0])
         if u==c:
@@ -171,20 +181,41 @@ def precisionEstimator(clasRes, trainPrep):
                  results[1]= results[1]+ 1  
              elif cl.lower() == "b" or cl.lower() == "i": 
                  results[2]= results[2]+ 1 
+             elif us.lower() == "b" or us.lower() == "i" and cl.lower()=="o": 
+                 results[3]= results[3]+ 1 
     return results        
 
 
+#MAIN VARIABLES
+truePositives = 0
+falsePositives = 0
+realPositives = 0
+falseNegatives = 0
+
+#MAIN SCRIPT
+
+phrases = getPhrasesFromFile("Trialdocu.txt")
+print(phrases)
 for phrase in phrases:
+    print(phrase)
     trainPrep = checkUsersPresence(phrase, users) 
-    print(trainPrep[0])
-    trainUs = prepareMarkedUsers(trainPrep)     
-    clasRes = getUsersFromNN(phrase)
-    res = precisionEstimator(clasRes,trainUs)
-    realPositives = realPositives + res[0]
-    truePositives = truePositives + res[1]
-    falsePositives = falsePositives + res[2]
-print("True positives - " + str(truePositives))
-print("False positives - " + str(falsePositives))
-print("Real positives - " + str(realPositives))
+    if len(trainPrep)>0:
+        print(trainPrep[0])
+        trainUs = prepareMarkedUsers(trainPrep)     
+        clasRes = getUsersFromNN(phrase)
+        if len(clasRes)>0:
+             res = precisionEstimator(clasRes,trainUs)
+             realPositives = realPositives + res[0]
+             truePositives = truePositives + res[1]
+             falsePositives = falsePositives + res[2]
+
+precision = truePositives/(truePositives+falsePositives)
+recall = truePositives/(truePositives+falseNegatives)
+f1 = 2*(precision*recall/precision +recall)
+
+
+print("precision - " + str(precision))
+print("recall - " + str(recall))
+print("f1 score - " + str(f1))
 
 
