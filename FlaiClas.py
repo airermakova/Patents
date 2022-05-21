@@ -168,8 +168,12 @@ def getUsersFromNN(phrase):
 
 def precisionEstimator(clasRes, trainPrep):
     results = [0,0,0,0]
-    
-    for i in range(len(clasRes)):
+    diff = len(clasRes)
+    if len(clasRes) < len(trainPrep):
+        diff = len(clasRes)
+    elif len(clasRes) > len(trainPrep):
+        diff = len(trainPrep)
+    for i in range(diff):
         c = re.sub(r'\W+', '', clasRes[i][0])
         u = re.sub(r'\W+', '', trainPrep[i][0])
         if u==c:
