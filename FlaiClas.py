@@ -8,6 +8,7 @@ import re
 import nltk
 import numpy
 import random
+import codecs
 from langdetect import detect
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
@@ -32,7 +33,7 @@ def getPhrasesFromFile(fileName):
     phrases= []    
     tokenized_phrases = []
     try:
-       with open(fileName, 'r') as file:
+       with codecs.open(fileName, 'r', "utf-8") as file:
            phrases = file.read().split(".")
        return phrases
     except:
@@ -167,8 +168,7 @@ def getUsersFromNN(phrase):
 
 def precisionEstimator(clasRes, trainPrep):
     results = [0,0,0,0]
-    if len(clasRes) != len(trainPrep):
-        return results
+    
     for i in range(len(clasRes)):
         c = re.sub(r'\W+', '', clasRes[i][0])
         u = re.sub(r'\W+', '', trainPrep[i][0])
@@ -184,6 +184,22 @@ def precisionEstimator(clasRes, trainPrep):
              elif us.lower() == "b" or us.lower() == "i" and cl.lower()=="o": 
                  results[3]= results[3]+ 1 
     return results        
+
+def equalizeArrays(clasRes, trainPrep):
+    if len(clasRes) < len(trainPrep):
+        diff = len(trainPrep)-len(clasRes)
+        for i in range(len(clasRes), diff-1):
+            ls = list(trainPrep[i])
+            ls[1] = "O"
+            clasRes.append(tuple(ls))
+        return clasRes
+    if len(clasRes) > len(trainPrep):
+        diff = len(clasRes) - len(trainPrep)
+        for i in range(len(trainPrep), diff-1):
+            ls = list(clasRes[i])
+            ls[1] = "O"
+            trainPrep.append(tuple(ls))
+        return trainPrep
 
 
 #MAIN VARIABLES
@@ -204,6 +220,10 @@ for phrase in phrases:
         trainUs = prepareMarkedUsers(trainPrep)     
         clasRes = getUsersFromNN(phrase)
         if len(clasRes)>0:
+             if len(clasRes) > len(trainPrep):
+                 trainPrep = equalizeArrays(clasRes, trainPrep)
+             else:
+                 clasRes = equalizeArrays(clasRes, trainPrep)
              res = precisionEstimator(clasRes,trainUs)
              realPositives = realPositives + res[0]
              truePositives = truePositives + res[1]
@@ -211,7 +231,7 @@ for phrase in phrases:
 
 precision = truePositives/(truePositives+falsePositives)
 recall = truePositives/(truePositives+falseNegatives)
-f1 = 2*(precision*recall/precision +recall)
+f1 = 2*(precision*recall/(precision +recall))
 
 
 print("precision - " + str(precision))
